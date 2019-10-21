@@ -1,0 +1,13 @@
+.tableCell {
+	border: 1px solid #dcdcdc;
+	padding: 10px;
+	&.snake {
+		background: #37a537;
+	}
+	&.apple {
+		background: #f77171;
+	}
+	&.rock {
+		background: #5b5bec;
+	}
+}
