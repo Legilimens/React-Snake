@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import useInterval from './customHook/useInterval'
 import Table from './components/table/table';
 import { cloneDeep, isEqual } from 'lodash';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from './components/dialog/dialog'
 import './App.css';
 
 function App() {
@@ -32,7 +28,7 @@ function App() {
     [6, 7],
     [2, 15],
   ];
-  const initialDirection = 'Left'
+  const initialDirection = ''
 
   const [field, setField] = useState(Array(20).fill(Array(20).fill(0)));
   const [snake, setSnake] = useState(initialSnake);
@@ -45,23 +41,23 @@ function App() {
     const controlButtons = (e) => {
       switch (e.key) {
         case ('ArrowUp'):
-          if (direction !== 'Down' && !dialogOpen) {
-            snakeUp();
+          if (direction !== 'Up' && direction !== 'Down' && !dialogOpen) {
+            setDirection('Up');
           }
           break;
         case ('ArrowDown'):
-          if (direction !== 'Up' && !dialogOpen) {
-            snakeDown();
+          if (direction !== 'Down' && direction !== 'Up' && !dialogOpen) {
+            setDirection('Down');
           }
           break;
         case ('ArrowLeft'):
-          if (direction !== 'Right' && !dialogOpen) {
-            snakeLeft()
+          if (direction !== 'Left' && direction !== 'Right' && !dialogOpen) {
+            setDirection('Left');
           }
           break;
         case ('ArrowRight'):
-          if (direction !== 'Left' && !dialogOpen) {
-            snakeRight();
+          if (direction !== 'Right' && direction !== 'Left' && !dialogOpen) {
+            setDirection('Right');
           }
           break;
         default:
@@ -75,7 +71,7 @@ function App() {
     return () => {
       window.removeEventListener('keyup', controlButtons);
     };
-  }, [snake]);
+  }, [snake, dialogOpen]);
 
   const gameOver = () => {
     setDialogOpen(true);
@@ -117,28 +113,43 @@ function App() {
   }
 
   const snakeUp = () => {
-    setDirection('Up');
     const snakeCopy = cloneDeep(snake);
     setSnake([[--snakeCopy[0][0], snakeCopy[0][1]], ...snake.slice(0, -1)]);
   }
 
   const snakeDown = () => {
-    setDirection('Down');
     const snakeCopy = cloneDeep(snake);
     setSnake([[++snakeCopy[0][0], snakeCopy[0][1]], ...snake.slice(0, -1)]);
   }
 
   const snakeLeft = () => {
-    setDirection('Left');
     const snakeCopy = cloneDeep(snake);
     setSnake([[snakeCopy[0][0], --snakeCopy[0][1]], ...snake.slice(0, -1)]);
   }
 
   const snakeRight = () => {
-    setDirection('Right');
     const snakeCopy = cloneDeep(snake);
     setSnake([[snakeCopy[0][0], ++snakeCopy[0][1]], ...snake.slice(0, -1)]);
   }
+
+  useInterval(() => {
+    switch (direction) {
+      case ('Up'):
+        snakeUp();
+        break;
+      case ('Down'):
+        snakeDown();
+        break;
+      case ('Left'):
+        snakeLeft()
+        break;
+      case ('Right'):
+        snakeRight();
+        break;
+      default:
+        return;
+    }
+  }, 300);
 
   return (
     <div className="App">
@@ -148,24 +159,10 @@ function App() {
         apple={apple}
         rocks={rocks}
       />
-      <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Game over :("}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Игра окончена. Но не расстраивайтесь! Попробуйте снова, и Вам обязательно повезёт!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} color="primary" autoFocus>
-            Новая игра
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Dialog 
+        dialogOpen = {dialogOpen}
+        setDialogOpen = {setDialogOpen}
+      />
     </div>
   );
 }
