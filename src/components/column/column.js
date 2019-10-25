@@ -13,9 +13,6 @@ function Column(props) {
 						cellId = {key}
 						index={key}
 						cellData={el}
-						snake={props.snake}
-						apple={props.apple}
-						rocks={props.rocks}
 					/>
 				))
 			}

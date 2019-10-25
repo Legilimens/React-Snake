@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
+import { DialogContext } from '../../context/dialog/dialogContext';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,12 +7,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-function ModalDialog(props) {
-    const { dialogOpen, setDialogOpen } = props;
+function ModalDialog() {
+    const { dialog, dialogHide } = useContext(DialogContext)
+
     return (
         <Dialog
-            open={dialogOpen}
-            onClose={() => setDialogOpen(false)}
+            open={dialog}
+            onClose={dialogHide}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
@@ -22,7 +24,7 @@ function ModalDialog(props) {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setDialogOpen(false)} color="primary" autoFocus>
+                <Button onClick={dialogHide} color="primary" autoFocus>
                     Новая игра
                 </Button>
             </DialogActions>

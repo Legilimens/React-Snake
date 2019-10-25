@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { FieldContext } from '../../context/field/fieldContext';
 import Column from '../column/column.js';
 import './table.scss';
 
-function Table(props) {
+function Table() {
+	const { field } = useContext(FieldContext);
 	return (
 		<div className="gameTable">
 			{
-				props.field.map((el, key) => (
+				field.map((el, key) => (
 					<Column
 						key={key}
 						columnData={el}
 						columnId={key}
-						snake={props.snake}
-						apple={props.apple}
-						rocks={props.rocks}
 					/>
 				))
 			}
