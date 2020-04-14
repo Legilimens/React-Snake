@@ -94,24 +94,45 @@ function Game() {
     });
   }
 
-  useInterval(() => {
-    switch (direction) {
-      case ('Up'):
-        snakeUp();
-        break;
-      case ('Down'):
-        snakeDown();
-        break;
-      case ('Left'):
-        snakeLeft()
-        break;
-      case ('Right'):
-        snakeRight();
-        break;
-      default:
-        return;
-    }
-  }, 300);
+  // useInterval(() => {
+  //   switch (direction) {
+  //     case ('Up'):
+  //       snakeUp();
+  //       break;
+  //     case ('Down'):
+  //       snakeDown();
+  //       break;
+  //     case ('Left'):
+  //       snakeLeft()
+  //       break;
+  //     case ('Right'):
+  //       snakeRight();
+  //       break;
+  //     default:
+  //       return;
+  //   }
+  // }, 300);
+  useEffect(() => {
+    const int = setInterval(() => {
+      switch (direction) {
+        case ('Up'):
+          snakeUp();
+          break;
+        case ('Down'):
+          snakeDown();
+          break;
+        case ('Left'):
+          snakeLeft()
+          break;
+        case ('Right'):
+          snakeRight();
+          break;
+        default:
+          return;
+      }
+    }, 300);
+    return () => clearInterval(int);
+  }, [direction, snake])
 
   return (
     <div className="game">
